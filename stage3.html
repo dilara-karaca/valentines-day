@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Üçüncü Aşama </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="timer" id="timer">
+            <span class="timer-icon">⏱️</span>
+            <span class="timer-text" id="timerText">1:00</span>
+        </div>
+
+        <h1>Hafıza Kartları Oyunu 🎴</h1>
+        <p style="text-align: center; margin-bottom: 30px; color: #7a3a45; font-size: 15px;">
+            Kartları çevir ve aynı olan fotoğrafları eşleştir!
+        </p>
+
+        <div class="memory-game" id="memoryGame" data-started="false">
+        </div>
+
+    </div>
+
+    <!-- GAME OVER PANEL -->
+    <div id="stage3GameOver" class="game-over-panel hidden">
+        <div class="game-over-content">
+            <div class="game-over-icon">⏰</div>
+            <h2>Süre Doldu!</h2>
+            <p>Zamanın bitti! Tekrar dene ve daha hızlı ol.</p>
+            <button onclick="location.reload()" class="retry-btn">Yeniden Dene</button>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div id="stage3SuccessModal" class="modal hidden">
+        <div class="stage-panel">
+            <img src="assets/anahtar-3-4.png" alt="Anahtar 3/4" class="key-image" />
+            <h2 class="stage-title">TEBRİKLER!</h2>
+
+            <p class="stage-text">
+                ÜÇÜNCÜ AŞAMAYI BAŞARIYLA TAMAMLADIN!<br>
+                SON AŞAMAYA HAZIR MISIN?
+            </p>
+            <button id="goStage4">Son Aşamaya Geç</button>
+        </div>
+    </div>
+
+    <!-- CONFETTI -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- SCRIPT -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>

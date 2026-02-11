@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Şifreyi Çöz 💗</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- POPUP HARF -->
+    <div id="letterPopup" class="letter-popup hidden">
+        <div id="popupLetter" class="popup-letter"></div>
+    </div>
+
+    <!-- AŞAMA TAMAMLANDI PANELİ -->
+    <div id="stageComplete" class="stage-complete hidden">
+        <div class="stage-panel">
+            <img src="assets/anahtar-1-4.png" alt="Anahtar 1/4" class="key-image">
+
+            <h2 class="stage-title">TEBRİKLER!</h2>
+
+            <p class="stage-text">
+                İLK AŞAMAYI BAŞARIYLA TAMAMLADIN!<br>
+                İKİNCİ AŞAMAYA HAZIR MISIN?
+            </p>
+            <button id="goStage2">İkinci Aşamaya Geç</button>
+        </div>
+    </div>
+
+    <!-- ANA İÇERİK -->
+    <div class="container">
+        <h1>Aşamaları Tamamla, Bana Ulaş 💌</h1>
+
+        <div class="password-area" id="passwordArea"></div>
+        <div class="letter-pool" id="letterPool"></div>
+
+        <div class="questions" id="questions"></div>
+    </div>
+
+
+
+    <!-- CONFETTI -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- SCRIPT -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>

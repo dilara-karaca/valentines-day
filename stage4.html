@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Sevgiliye Koşuyor 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5000;
+        }
+
+        .intro-panel {
+            background: linear-gradient(135deg, #FFB6D9, #FFC9E0);
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.6);
+
+            transform: scale(0);
+            opacity: 0;
+            animation: introZoom 0.5s ease-out forwards;
+        }
+
+        @keyframes introZoom {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+
+        .intro-panel h2 {
+            color: #FF1493;
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        .intro-panel p {
+            font-size: 20px;
+            color: #4A0E4E;
+            margin: 15px 0;
+        }
+
+        .intro-panel button {
+            margin-top: 25px;
+            padding: 15px 35px;
+            font-size: 20px;
+            border: none;
+            border-radius: 20px;
+            background: #FF1493;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .intro-panel button:hover {
+            transform: scale(1.1);
+            background: #FF69B4;
+        }
+
+
+        body {
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #90EE90 70%, #90EE90 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .world {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 5000px;
+            height: 100vh;
+            transition: transform 0.1s linear;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: #8B4513;
+            border-top: 5px solid #654321;
+        }
+
+        .grass {
+            position: absolute;
+            bottom: 100px;
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(90deg,
+                    #228B22,
+                    #228B22 10px,
+                    #32CD32 10px,
+                    #32CD32 20px);
+        }
+
+        #mario {
+            position: fixed;
+            bottom: 120px;
+            left: 200px;
+            width: 90px;
+            height: 90px;
+            z-index: 10;
+            animation: float 0.5s ease-in-out infinite alternate;
+        }
+
+        #mario img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0px);
+            }
+
+            to {
+                transform: translateY(-5px);
+            }
+        }
+
+        .jumping {
+            animation: jump 0.5s ease-out !important;
+        }
+
+        @keyframes jump {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-250px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .broken-heart-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 80px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 4000;
+            animation: brokenHeartZoom 0.6s ease-out forwards;
+        }
+
+        @keyframes brokenHeartZoom {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            40% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(2.5);
+                opacity: 0;
+            }
+        }
+
+
+        .moving-mushroom {
+            position: absolute;
+            bottom: 120px;
+            width: 40px;
+            height: 40px;
+            animation: moveMushroom 15s linear infinite;
+        }
+
+        .moving-mushroom img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes moveMushroom {
+            from {
+                left: 100%;
+            }
+
+            to {
+                left: -100px;
+            }
+        }
+
+        .ground-obstacle {
+            position: absolute;
+            bottom: 120px;
+            width: 35px;
+            height: 35px;
+        }
+
+        .ground-obstacle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .top-platform {
+            position: absolute;
+            bottom: 220px;
+            width: 120px;
+            height: 80px;
+        }
+
+        .top-platform img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .coin-block {
+            position: absolute;
+            bottom: 210px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .coin-block img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .coin-block.hit {
+            animation: blockHit 0.3s ease-out;
+        }
+
+        @keyframes blockHit {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .coin-block.empty {
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .floating-coin {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            animation: coinFloat 0.8s ease-out forwards;
+            pointer-events: none;
+        }
+
+        .floating-coin img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes coinFloat {
+            0% {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-80px);
+                opacity: 0;
+            }
+        }
+
+        .static-obstacle {
+            position: absolute;
+            bottom: 120px;
+            font-size: 70px;
+            display: none;
+        }
+
+
+
+        #castle {
+            position: absolute;
+            bottom: 90px;
+            right: 150px;
+            font-size: 200px;
+            display: none;
+            animation: castleAppear 1s ease-out;
+        }
+
+        @keyframes castleAppear {
+            from {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        #princess {
+            position: absolute;
+            bottom: 105px;
+            right: 180px;
+            width: 110px;
+            height: 110px;
+            animation: bounce 1s ease-in-out infinite;
+            display: none;
+            z-index: 5;
+        }
+
+        #princess img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .hearts {
+            position: absolute;
+            font-size: 30px;
+            animation: float-hearts 3s ease-in-out infinite;
+            opacity: 0.7;
+            display: none;
+        }
+
+        @keyframes float-hearts {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(10px, -20px) rotate(15deg);
+            }
+        }
+
+        .cloud {
+            position: absolute;
+            top: 100px;
+            font-size: 40px;
+            animation: moveCloud 20s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes moveCloud {
+            from {
+                left: -100px;
+            }
+
+            to {
+                left: 100%;
+            }
+        }
+
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .score {
+            color: white;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .coins-score {
+            color: gold;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .lives-display {
+            color: #FF1493;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+
+        .instructions {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 18px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: right;
+            z-index: 100;
+        }
+
+
+
+        .win-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 20, 147, 0.95);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            font-size: 36px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(255, 20, 147, 0.8);
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: translate(-50%, -50%) scale(0);
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .win-message.show {
+            display: block;
+        }
+
+        .win-message button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 20px;
+            background: white;
+            color: #FF1493;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .win-message button:hover {
+            transform: scale(1.1);
+        }
+
+        .game-over-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(139, 0, 0, 0.95);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            font-size: 36px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(139, 0, 0, 0.8);
+            animation: popIn 0.5s ease-out;
+        }
+
+        .game-over-message.show {
+            display: block;
+        }
+
+        .game-over-message button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 20px;
+            background: white;
+            color: #8B0000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .game-over-message button:hover {
+            transform: scale(1.1);
+        }
+
+        .final-envelope {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            /* tam kapatır */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+
+        .final-envelope img {
+            max-width: 90%;
+            max-height: 90%;
+            animation: zoomInFinal 0.6s ease-out forwards;
+        }
+
+        @keyframes zoomInFinal {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .heart-particle {
+            position: fixed;
+            bottom: -20px;
+            font-size: 24px;
+            animation: floatHearts 4s linear forwards;
+            z-index: 100000;
+            pointer-events: none;
+        }
+
+        @keyframes floatHearts {
+            0% {
+                transform: translateY(0) scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-110vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <div id="finalEnvelope" class="final-envelope">
+            <img src="assets/zarf.png" alt="Final Zarf">
+        </div>
+
+        <div class="intro-overlay" id="introOverlay">
+            <div class="intro-panel">
+                <h2>🎮 Oyun Başlıyor!</h2>
+                <p><strong>Super Mario, engelleri aşarak Prensese ulaş!</strong></p>
+                <p>YOLUN SONUNDA SÜRPRİZ SENİ BEKLİYOR!</p>
+                <p style="margin-top:20px; font-weight:bold; color:#C71585;">
+                    ❤️ Unutma, 3 canın var!
+                </p>
+                <button onclick="startGame()">Başla 💕</button>
+            </div>
+        </div>
+
+        <div class="hud">
+            <div class="score">📏 Mesafe: <span id="distance">0</span>m</div>
+            <div class="coins-score"><img src="assets/coin_10693132.png"
+                    style="width: 28px; height: 28px; vertical-align: middle;"> Coinler: <span id="coins">0</span></div>
+            <div class="lives-display">❤️ Canlar: <span id="lives">3</span></div>
+        </div>
+        <div class="instructions">
+            ⬅️ Sol ➡️ Sağ<br>
+            SPACE Zıpla<br>
+            🍄 Bloklara zıpla = Coin!<br>
+            🏰 Kuleye ulaş!
+        </div>
+
+        <div id="mario"><img src="assets/prens.png" alt="prens"></div>
+
+        <div class="world" id="world">
+            <!-- Clouds -->
+            <div class="cloud" style="top: 50px; animation-delay: 0s;">☁️</div>
+            <div class="cloud" style="top: 120px; animation-delay: -10s;">☁️</div>
+            <div class="cloud" style="top: 180px; animation-delay: -5s;">☁️</div>
+
+            <!-- Hearts floating around princess -->
+            <div class="hearts" id="heart1" style="right: 150px; bottom: 350px; animation-delay: 0s;">💕</div>
+            <div class="hearts" id="heart2" style="right: 80px; bottom: 380px; animation-delay: 1s;">💖</div>
+            <div class="hearts" id="heart3" style="right: 220px; bottom: 320px; animation-delay: 2s;">💗</div>
+
+            <!-- Castle -->
+            <div id="castle">🏰</div>
+            <div id="princess"><img src="assets/dilos.png" alt="princess"></div>
+
+            <!-- Ground Obstacles (Carnivorous Plants) - jump over them -->
+            <div class="ground-obstacle" style="left: 900px;"><img src="assets/carnivorous-plant.png" alt="plant"></div>
+            <div class="ground-obstacle" style="left: 1400px;"><img src="assets/carnivorous-plant.png" alt="plant">
+            </div>
+            <div class="ground-obstacle" style="left: 2000px;"><img src="assets/carnivorous-plant.png" alt="plant">
+            </div>
+            <div class="ground-obstacle" style="left: 2700px;"><img src="assets/carnivorous-plant.png" alt="plant">
+            </div>
+
+            <!-- Top Platforms - stand on them to avoid moving mushrooms -->
+            <div class="top-platform" style="left: 650px;"><img src="assets/ust_engel.png" alt="platform"></div>
+            <div class="top-platform" style="left: 1650px;"><img src="assets/ust_engel.png" alt="platform"></div>
+            <div class="top-platform" style="left: 2350px;"><img src="assets/ust_engel.png" alt="platform"></div>
+
+            <!-- Moving Mushrooms - avoid them or jump on platforms -->
+            <div class="moving-mushroom" style="animation-delay: 3s;"><img src="assets/mushroom_5813714.png"
+                    alt="moving mushroom"></div>
+            <div class="moving-mushroom" style="animation-delay: 10s;"><img src="assets/mushroom_5813714.png"
+                    alt="moving mushroom"></div>
+
+            <!-- Coin Blocks (hit from below to get coins) -->
+            <div class="coin-block" data-coins="1" style="left: 550px;"><img src="assets/mushroom_2.png" alt="block">
+            </div>
+            <div class="coin-block" data-coins="1" style="left: 1100px;"><img src="assets/mushroom_2.png" alt="block">
+            </div>
+            <div class="coin-block" data-coins="1" style="left: 1600px;"><img src="assets/mushroom_2.png" alt="block">
+            </div>
+            <div class="coin-block" data-coins="1" style="left: 2150px;"><img src="assets/mushroom_2.png" alt="block">
+            </div>
+            <div class="coin-block" data-coins="1" style="left: 2550px;"><img src="assets/mushroom_2.png" alt="block">
+            </div>
+            <div class="coin-block" data-coins="1" style="left: 3000px;"><img src="assets/mushroom_2.png" alt="block">
+            </div>
+
+            <div class="grass"></div>
+            <div class="ground"></div>
+
+        </div><!-- end world -->
+
+        <div class="win-message" id="winMessage">
+            <div>💕 TEBRIKLER! 💕</div>
+            <div style="font-size: 24px; margin-top: 20px;">
+                Prensesine kavuştun! 👸❤️<br>
+                <span id="finalCoins"></span><br>
+                Bu sevgi dolu yolculuk için teşekkürler!
+            </div>
+            <button onclick="location.reload()">Tekrar Oyna </button>
+        </div>
+        <div class="game-over-message" id="gameOverMessage">
+            <div>💔 GAME OVER! 💔</div>
+            <div style="font-size: 24px; margin-top: 20px;">
+                Bütün canlarını kaybettin!<br>
+                <span id="gameOverCoins"></span><br>
+                <span id="gameOverDistance"></span>
+            </div>
+            <button onclick="location.reload()">Tekrar Dene </button>
+        </div>
+    </div>
+
+    <script>
+        const mario = document.getElementById('mario');
+        const world = document.getElementById('world');
+        const princess = document.getElementById('princess');
+        const castle = document.getElementById('castle');
+        const distanceDisplay = document.getElementById('distance');
+        const coinsDisplay = document.getElementById('coins');
+        const livesDisplay = document.getElementById('lives');
+        const winMessage = document.getElementById('winMessage');
+        const gameOverMessage = document.getElementById('gameOverMessage');
+        const groundObstacles = document.querySelectorAll('.ground-obstacle');
+        const movingMushrooms = document.querySelectorAll('.moving-mushroom');
+        const topPlatforms = document.querySelectorAll('.top-platform');
+        const coinBlocks = document.querySelectorAll('.coin-block');
+        const staticObstacles = document.querySelectorAll('.static-obstacle');
+
+        let worldOffset = 0;
+        let isJumping = false;
+        let gameActive = false;
+        let distance = 0;
+        let coinsCollected = 0;
+        let lives = 3;
+        let castleAppeared = false;
+        let isInvulnerable = false;
+        let keysPressed = {};
+        let onPlatform = false;
+        let platformHeight = 0;
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+            keysPressed[e.key] = true;
+
+            if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping) {
+                jump();
+            }
+            if (e.key === "ArrowDown" && onPlatform) {
+                onPlatform = false;
+                mario.style.bottom = "120px";
+            }
+
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keysPressed[e.key] = false;
+        });
+
+        // Continuous movement
+        function updateMovement() {
+            if (!gameActive) return;
+
+            if (keysPressed['ArrowRight']) {
+                // Move world to the left (Mario appears to move right)
+                worldOffset -= 8;
+                world.style.transform = `translateX(${worldOffset}px)`;
+                distance += 0.4;
+                distanceDisplay.textContent = Math.floor(distance);
+
+                // Show castle and princess after 80m
+                if (distance >= 80 && !castleAppeared) {
+                    showCastle();
+                }
+
+                checkWin();
+            } else if (keysPressed['ArrowLeft']) {
+                // Move world to the right (Mario appears to move left)
+                worldOffset = Math.min(worldOffset + 8, 0);
+                world.style.transform = `translateX(${worldOffset}px)`;
+            }
+        }
+
+        function jump() {
+            if (isJumping) return;
+
+            isJumping = true;
+
+            mario.classList.add('jumping');
+
+            setTimeout(() => {
+                mario.classList.remove('jumping');
+                isJumping = false;
+            }, 500);
+        }
+
+
+
+
+        function showCastle() {
+            castleAppeared = true;
+            castle.style.display = 'block';
+            princess.style.display = 'block';
+            document.getElementById('heart1').style.display = 'block';
+            document.getElementById('heart2').style.display = 'block';
+            document.getElementById('heart3').style.display = 'block';
+
+            // Show static obstacles
+            staticObstacles.forEach(obs => {
+                obs.style.display = 'block';
+            });
+        }
+
+        function checkWin() {
+            if (!castleAppeared) return;
+
+            const marioRect = mario.getBoundingClientRect();
+            const castleRect = castle.getBoundingClientRect();
+
+            // Check if Mario reached castle
+            if (marioRect.right >= castleRect.left && marioRect.left <= castleRect.right) {
+                gameActive = false;
+                document.getElementById('finalCoins').innerHTML = `<img src="assets/coin_10693132.png" style="width: 24px; height: 24px; vertical-align: middle;"> Toplanan coin: ${coinsCollected}`;
+
+
+                // Add celebration effect
+                mario.style.animation = 'bounce 0.5s ease-in-out infinite';
+                princess.style.animation = 'bounce 0.5s ease-in-out infinite';
+
+                setTimeout(() => {
+                    document.getElementById("finalEnvelope").style.display = "flex";
+                    createHearts();
+                }, 800);
+
+            }
+        }
+
+        function showTextWithTypewriter() {
+            const lines = ['line1', 'line2', 'line3', 'line4'];
+            let currentLine = 0;
+
+            function showNextLine() {
+                if (currentLine < lines.length) {
+                    const element = document.getElementById(lines[currentLine]);
+                    element.classList.add('typewriter');
+                    currentLine++;
+                    setTimeout(showNextLine, 800);
+                } else {
+                    // Show button after all text is shown
+                    setTimeout(() => {
+                        document.getElementById('continueBtn').style.opacity = '1';
+                        document.getElementById('continueBtn').style.transition = 'opacity 0.5s';
+                    }, 500);
+                }
+            }
+
+            showNextLine();
+        }
+
+        function checkCoinBlockHit() {
+            if (!isJumping) return;
+
+            const marioRect = mario.getBoundingClientRect();
+            const marioTop = marioRect.top;
+
+            coinBlocks.forEach((block) => {
+                const blockRect = block.getBoundingClientRect();
+                const blockBottom = blockRect.bottom;
+                const blockLeft = blockRect.left;
+                const blockRight = blockRect.right;
+
+                // Check if Mario's head hits the block from below
+                if (
+                    marioRect.left < blockRight &&
+                    marioRect.right > blockLeft &&
+                    marioTop <= blockBottom &&
+                    marioTop >= blockBottom - 30 // Hit detection range
+                ) {
+                    const coinsInBlock = parseInt(block.getAttribute('data-coins') || '0');
+
+                    if (coinsInBlock > 0) {
+                        // Coin collected from block
+                        block.setAttribute('data-coins', coinsInBlock - 1);
+                        coinsCollected++;
+                        coinsDisplay.textContent = coinsCollected;
+
+                        // Block hit animation
+                        block.classList.add('hit');
+                        setTimeout(() => {
+                            block.classList.remove('hit');
+                        }, 300);
+
+                        // Show floating coin
+                        const floatingCoin = document.createElement('div');
+                        floatingCoin.className = 'floating-coin';
+                        floatingCoin.innerHTML = '<img src="assets/coin_10693132.png" alt="coin">';
+                        floatingCoin.style.left = blockLeft + 'px';
+                        floatingCoin.style.top = blockBottom - 50 + 'px';
+                        document.querySelector('.game-container').appendChild(floatingCoin);
+
+                        setTimeout(() => {
+                            floatingCoin.remove();
+                        }, 800);
+
+                        // Mark block as empty if no coins left
+                        if (coinsInBlock - 1 === 0) {
+                            block.classList.add('empty');
+                        }
+                    }
+                }
+            });
+        }
+
+        function checkCollision() {
+            if (!gameActive) return;
+
+            const marioRect = mario.getBoundingClientRect();
+
+            // Add margin for more forgiving collision detection
+            const tolerance = 15;
+            const adjustedMarioRect = {
+                left: marioRect.left + tolerance,
+                right: marioRect.right - tolerance,
+                top: marioRect.top + tolerance,
+                bottom: marioRect.bottom - tolerance
+            };
+
+            // Check ground obstacles (plants) - jump over them
+            groundObstacles.forEach(obstacle => {
+                const obstacleRect = obstacle.getBoundingClientRect();
+
+                // Extra tolerance for plants
+                const plantTolerance = 15;
+                const adjustedObstacleRect = {
+                    left: obstacleRect.left + plantTolerance,
+                    right: obstacleRect.right - plantTolerance,
+                    top: obstacleRect.top + plantTolerance,
+                    bottom: obstacleRect.bottom
+                };
+
+                if (
+                    adjustedMarioRect.left < adjustedObstacleRect.right &&
+                    adjustedMarioRect.right > adjustedObstacleRect.left &&
+                    adjustedMarioRect.bottom > adjustedObstacleRect.top &&
+                    adjustedMarioRect.top < adjustedObstacleRect.bottom
+                ) {
+                    handleCollision();
+                }
+            });
+
+            // Check moving mushrooms with extra tolerance
+            movingMushrooms.forEach(mushroom => {
+                const mushroomRect = mushroom.getBoundingClientRect();
+
+                // Extra tolerance for moving mushrooms
+                const mushroomTolerance = 20;
+                const adjustedMushroomRect = {
+                    left: mushroomRect.left + mushroomTolerance,
+                    right: mushroomRect.right - mushroomTolerance,
+                    top: mushroomRect.top + mushroomTolerance,
+                    bottom: mushroomRect.bottom - mushroomTolerance
+                };
+
+                if (
+                    adjustedMarioRect.left < adjustedMushroomRect.right &&
+                    adjustedMarioRect.right > adjustedMushroomRect.left &&
+                    adjustedMarioRect.bottom > adjustedMushroomRect.top &&
+                    adjustedMarioRect.top < adjustedMushroomRect.bottom &&
+                    mushroomRect.left > 0 && mushroomRect.left < window.innerWidth
+                ) {
+                    handleCollision();
+                }
+            });
+
+            // Check platform head collision (when jumping under platform)
+            if (isJumping) {
+                topPlatforms.forEach(platform => {
+                    const platformRect = platform.getBoundingClientRect();
+
+                    // Check if Mario's head hits platform from below
+                    if (
+                        marioRect.left < platformRect.right - 10 &&
+                        marioRect.right > platformRect.left + 10 &&
+                        marioRect.top <= platformRect.bottom &&
+                        marioRect.top >= platformRect.bottom - 20
+                    ) {
+                        // Stop jump animation and start falling
+                        mario.classList.remove('jumping');
+                        isJumping = false;
+                    }
+                });
+            }
+
+            // Check platform landing
+            checkPlatformLanding();
+        }
+
+        function checkPlatformLanding() {
+
+            const marioRect = mario.getBoundingClientRect();
+            let landed = false;
+
+            topPlatforms.forEach(platform => {
+
+                const rect = platform.getBoundingClientRect();
+
+                const isFalling = !isJumping; // sadece düşerken
+
+                const withinX =
+                    marioRect.right > rect.left + 20 &&
+                    marioRect.left < rect.right - 20;
+
+                const landingZone =
+                    marioRect.bottom >= rect.top - 10 &&
+                    marioRect.bottom <= rect.top + 20;
+
+                if (isFalling && withinX && landingZone) {
+
+                    landed = true;
+
+                    const newBottom = window.innerHeight - rect.top - 18;
+                    mario.style.bottom = newBottom + "px";
+                }
+            });
+
+            if (!landed) {
+                mario.style.bottom = "120px";
+            }
+        }
+
+
+
+        function handleCollision() {
+            if (isInvulnerable) return;
+
+            lives--;
+            livesDisplay.textContent = lives;
+            showBrokenHeart();
+
+
+            isInvulnerable = true;
+            mario.style.opacity = "0.4";
+
+            setTimeout(() => {
+                mario.style.opacity = "1";
+                isInvulnerable = false;
+            }, 1000);
+
+
+            if (lives <= 0) {
+                gameActive = false;
+
+                document.getElementById('gameOverCoins').innerHTML =
+                    `<img src="assets/coin_10693132.png" style="width:24px;height:24px;vertical-align:middle;"> Toplanan coin: ${coinsCollected}`;
+
+                document.getElementById('gameOverDistance').textContent =
+                    `Mesafe: ${distance}m`;
+
+                gameOverMessage.classList.add('show');
+                return;
+            }
+
+            // 🔁 Mario başa dönsün
+            worldOffset = 0;
+            world.style.transform = `translateX(${worldOffset}px)`;
+
+            // 📏 Mesafe sıfırla
+            distance = 0;
+            distanceDisplay.textContent = 0;
+
+            // 🪙 Coin sıfırla
+            coinsCollected = 0;
+            coinsDisplay.textContent = 0;
+
+            // 🍄 Coin blockları resetle
+            resetCoins();
+
+            // Mario yere insin
+            mario.style.bottom = "120px";
+        }
+
+
+
+        function resetCoins() {
+            // Reset all coin blocks to have 1 coin again
+            coinBlocks.forEach(block => {
+                block.setAttribute('data-coins', '1');
+                block.classList.remove('empty');
+            });
+        }
+
+        // Game loop
+        setInterval(() => {
+            updateMovement();
+            checkCollision();
+            checkCoinBlockHit();
+        }, 30);
+
+        function startGame() {
+            document.getElementById("introOverlay").style.display = "none";
+            gameActive = true;
+        }
+
+        function showBrokenHeart() {
+            const heart = document.createElement("div");
+            heart.className = "broken-heart-effect";
+            heart.textContent = "💔";
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 600);
+        }
+        function createHearts() {
+            const hearts = ["💖", "💘", "💕", "💗", "❤️"];
+
+            setInterval(() => {
+                const heart = document.createElement("div");
+                heart.className = "heart-particle";
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.fontSize = (20 + Math.random() * 30) + "px";
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+            }, 300);
+        }
+
+    </script>
+</body>
+
+</html>

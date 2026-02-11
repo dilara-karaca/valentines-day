@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>İkinci Aşama ⏳</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="lives">
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+        </div>
+
+        <h1>Anıları Doğru ZamanLa Eşleştir ⏳</h1>
+        <p class="stage-subtitle">
+            Anıları doğru tarihle eşleştir, kalbin kaç canın kaldığını belirleyecek!
+        </p>
+
+        <div class="timeline">
+            <div class="time-slot" data-answer="ilk-izmir">
+                <div class="drop-zone">BURAYA BIRAK</div>
+                <span>25.04.2024</span>
+            </div>
+
+            <div class="time-slot" data-answer="ilk-menemen">
+                <div class="drop-zone">BURAYA BIRAK</div>
+                <span>01.08.2024</span>
+            </div>
+
+            <div class="time-slot" data-answer="galata">
+                <div class="drop-zone">BURAYA BIRAK</div>
+                <span>03.10.2024</span>
+            </div>
+
+            <div class="time-slot" data-answer="dogum-gunu">
+                <div class="drop-zone">BURAYA BIRAK</div>
+                <span>06.01.2025</span>
+            </div>
+
+            <div class="time-slot" data-answer="ilk-etliekmek">
+                <div class="drop-zone">BURAYA BIRAK</div>
+                <span>23.04.2025</span>
+            </div>
+        </div>
+
+        <div class="events">
+
+            <div class="event event-photo" draggable="true" data-id="galata" id="galata">
+                <img src="assets/galata.jpeg" alt="Galata">
+            </div>
+
+            <div class="event" draggable="true" data-id="ilk-izmir" id="ilk-izmir">
+                İlk İzmir'e gittiğimiz tarih
+            </div>
+
+            <div class="event event-photo" draggable="true" data-id="ilk-etliekmek" id="ilk-etliekmek">
+                <img src="assets/etliekmek.jpeg" alt="İlk Etliekmek">
+            </div>
+
+            <div class="event" draggable="true" data-id="ilk-menemen" id="ilk-menemen">
+                Menemenimi yediğin ilk gün
+            </div>
+
+            <div class="event event-photo" draggable="true" data-id="dogum-gunu" id="dogum-gunu">
+                <img src="assets/dogum-gunu.jpeg" alt="Doğum Günü">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GAME OVER PANEL -->
+    <div id="gameOverPanel" class="game-over-panel hidden">
+        <div class="game-over-content">
+            <div class="game-over-icon">💔</div>
+            <h2>Game Over!</h2>
+            <p>Şimdi daha dikkatli ol ve tekrar dene.</p>
+            <button onclick="location.reload()" class="retry-btn"> Yeniden Dene</button>
+        </div>
+    </div>
+
+    <div id="stage2SuccessModal" class="modal hidden">
+        <div class="stage-panel">
+            <img src="assets/anahtar-2-4.png" alt="Anahtar 2/4" class="key-image" />
+            <h2 class="stage-title">TEBRİKLER!</h2>
+
+            <p class="stage-text">
+                İKİNCİ AŞAMAYI BAŞARIYLA TAMAMLADIN!<br>
+                ÜÇÜNCÜ AŞAMAYA HAZIR MISIN?
+            </p>
+            <button id="goStage3">Üçüncü Aşamaya Geç</button>
+        </div>
+    </div>
+
+
+    <!-- CONFETTI -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- SCRIPT -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
