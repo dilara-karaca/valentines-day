@@ -629,21 +629,17 @@
         <div id="mario"><img src="assets/prens.png" alt="prens"></div>
 
         <div class="world" id="world">
-            <!-- Clouds -->
             <div class="cloud" style="top: 50px; animation-delay: 0s;">☁️</div>
             <div class="cloud" style="top: 120px; animation-delay: -10s;">☁️</div>
             <div class="cloud" style="top: 180px; animation-delay: -5s;">☁️</div>
 
-            <!-- Hearts floating around princess -->
             <div class="hearts" id="heart1" style="right: 150px; bottom: 350px; animation-delay: 0s;">💕</div>
             <div class="hearts" id="heart2" style="right: 80px; bottom: 380px; animation-delay: 1s;">💖</div>
             <div class="hearts" id="heart3" style="right: 220px; bottom: 320px; animation-delay: 2s;">💗</div>
 
-            <!-- Castle -->
             <div id="castle">🏰</div>
             <div id="princess"><img src="assets/dilos.png" alt="princess"></div>
 
-            <!-- Ground Obstacles (Carnivorous Plants) - jump over them -->
             <div class="ground-obstacle" style="left: 900px;"><img src="assets/carnivorous-plant.png" alt="plant"></div>
             <div class="ground-obstacle" style="left: 1400px;"><img src="assets/carnivorous-plant.png" alt="plant">
             </div>
@@ -652,18 +648,15 @@
             <div class="ground-obstacle" style="left: 2700px;"><img src="assets/carnivorous-plant.png" alt="plant">
             </div>
 
-            <!-- Top Platforms - stand on them to avoid moving mushrooms -->
             <div class="top-platform" style="left: 650px;"><img src="assets/ust_engel.png" alt="platform"></div>
             <div class="top-platform" style="left: 1650px;"><img src="assets/ust_engel.png" alt="platform"></div>
             <div class="top-platform" style="left: 2350px;"><img src="assets/ust_engel.png" alt="platform"></div>
 
-            <!-- Moving Mushrooms - avoid them or jump on platforms -->
             <div class="moving-mushroom" style="animation-delay: 3s;"><img src="assets/mushroom_5813714.png"
                     alt="moving mushroom"></div>
             <div class="moving-mushroom" style="animation-delay: 10s;"><img src="assets/mushroom_5813714.png"
                     alt="moving mushroom"></div>
 
-            <!-- Coin Blocks (hit from below to get coins) -->
             <div class="coin-block" data-coins="1" style="left: 550px;"><img src="assets/mushroom_2.png" alt="block">
             </div>
             <div class="coin-block" data-coins="1" style="left: 1100px;"><img src="assets/mushroom_2.png" alt="block">
@@ -680,7 +673,7 @@
             <div class="grass"></div>
             <div class="ground"></div>
 
-        </div><!-- end world -->
+        </div>
 
         <div class="win-message" id="winMessage">
             <div>💕 TEBRIKLER! 💕</div>
@@ -730,7 +723,6 @@
         let onPlatform = false;
         let platformHeight = 0;
 
-        // Keyboard controls
         document.addEventListener('keydown', (e) => {
             if (!gameActive) return;
             keysPressed[e.key] = true;
@@ -749,25 +741,21 @@
             keysPressed[e.key] = false;
         });
 
-        // Continuous movement
         function updateMovement() {
             if (!gameActive) return;
 
             if (keysPressed['ArrowRight']) {
-                // Move world to the left (Mario appears to move right)
                 worldOffset -= 8;
                 world.style.transform = `translateX(${worldOffset}px)`;
                 distance += 0.4;
                 distanceDisplay.textContent = Math.floor(distance);
 
-                // Show castle and princess after 80m
                 if (distance >= 80 && !castleAppeared) {
                     showCastle();
                 }
 
                 checkWin();
             } else if (keysPressed['ArrowLeft']) {
-                // Move world to the right (Mario appears to move left)
                 worldOffset = Math.min(worldOffset + 8, 0);
                 world.style.transform = `translateX(${worldOffset}px)`;
             }
@@ -797,7 +785,6 @@
             document.getElementById('heart2').style.display = 'block';
             document.getElementById('heart3').style.display = 'block';
 
-            // Show static obstacles
             staticObstacles.forEach(obs => {
                 obs.style.display = 'block';
             });
@@ -809,13 +796,11 @@
             const marioRect = mario.getBoundingClientRect();
             const castleRect = castle.getBoundingClientRect();
 
-            // Check if Mario reached castle
             if (marioRect.right >= castleRect.left && marioRect.left <= castleRect.right) {
                 gameActive = false;
                 document.getElementById('finalCoins').innerHTML = `<img src="assets/coin_10693132.png" style="width: 24px; height: 24px; vertical-align: middle;"> Toplanan coin: ${coinsCollected}`;
 
 
-                // Add celebration effect
                 mario.style.animation = 'bounce 0.5s ease-in-out infinite';
                 princess.style.animation = 'bounce 0.5s ease-in-out infinite';
 
@@ -838,7 +823,6 @@
                     currentLine++;
                     setTimeout(showNextLine, 800);
                 } else {
-                    // Show button after all text is shown
                     setTimeout(() => {
                         document.getElementById('continueBtn').style.opacity = '1';
                         document.getElementById('continueBtn').style.transition = 'opacity 0.5s';
@@ -861,28 +845,25 @@
                 const blockLeft = blockRect.left;
                 const blockRight = blockRect.right;
 
-                // Check if Mario's head hits the block from below
                 if (
                     marioRect.left < blockRight &&
                     marioRect.right > blockLeft &&
                     marioTop <= blockBottom &&
-                    marioTop >= blockBottom - 30 // Hit detection range
+                    marioTop >= blockBottom - 30
                 ) {
                     const coinsInBlock = parseInt(block.getAttribute('data-coins') || '0');
 
                     if (coinsInBlock > 0) {
-                        // Coin collected from block
+
                         block.setAttribute('data-coins', coinsInBlock - 1);
                         coinsCollected++;
                         coinsDisplay.textContent = coinsCollected;
 
-                        // Block hit animation
                         block.classList.add('hit');
                         setTimeout(() => {
                             block.classList.remove('hit');
                         }, 300);
 
-                        // Show floating coin
                         const floatingCoin = document.createElement('div');
                         floatingCoin.className = 'floating-coin';
                         floatingCoin.innerHTML = '<img src="assets/coin_10693132.png" alt="coin">';
@@ -894,7 +875,6 @@
                             floatingCoin.remove();
                         }, 800);
 
-                        // Mark block as empty if no coins left
                         if (coinsInBlock - 1 === 0) {
                             block.classList.add('empty');
                         }
@@ -908,7 +888,6 @@
 
             const marioRect = mario.getBoundingClientRect();
 
-            // Add margin for more forgiving collision detection
             const tolerance = 15;
             const adjustedMarioRect = {
                 left: marioRect.left + tolerance,
@@ -917,11 +896,9 @@
                 bottom: marioRect.bottom - tolerance
             };
 
-            // Check ground obstacles (plants) - jump over them
             groundObstacles.forEach(obstacle => {
                 const obstacleRect = obstacle.getBoundingClientRect();
 
-                // Extra tolerance for plants
                 const plantTolerance = 15;
                 const adjustedObstacleRect = {
                     left: obstacleRect.left + plantTolerance,
@@ -940,11 +917,9 @@
                 }
             });
 
-            // Check moving mushrooms with extra tolerance
             movingMushrooms.forEach(mushroom => {
                 const mushroomRect = mushroom.getBoundingClientRect();
 
-                // Extra tolerance for moving mushrooms
                 const mushroomTolerance = 20;
                 const adjustedMushroomRect = {
                     left: mushroomRect.left + mushroomTolerance,
@@ -964,26 +939,22 @@
                 }
             });
 
-            // Check platform head collision (when jumping under platform)
             if (isJumping) {
                 topPlatforms.forEach(platform => {
                     const platformRect = platform.getBoundingClientRect();
 
-                    // Check if Mario's head hits platform from below
                     if (
                         marioRect.left < platformRect.right - 10 &&
                         marioRect.right > platformRect.left + 10 &&
                         marioRect.top <= platformRect.bottom &&
                         marioRect.top >= platformRect.bottom - 20
                     ) {
-                        // Stop jump animation and start falling
                         mario.classList.remove('jumping');
                         isJumping = false;
                     }
                 });
             }
 
-            // Check platform landing
             checkPlatformLanding();
         }
 
@@ -996,7 +967,7 @@
 
                 const rect = platform.getBoundingClientRect();
 
-                const isFalling = !isJumping; // sadece düşerken
+                const isFalling = !isJumping;
 
                 const withinX =
                     marioRect.right > rect.left + 20 &&
@@ -1052,36 +1023,29 @@
                 return;
             }
 
-            // 🔁 Mario başa dönsün
             worldOffset = 0;
             world.style.transform = `translateX(${worldOffset}px)`;
 
-            // 📏 Mesafe sıfırla
             distance = 0;
             distanceDisplay.textContent = 0;
 
-            // 🪙 Coin sıfırla
             coinsCollected = 0;
             coinsDisplay.textContent = 0;
 
-            // 🍄 Coin blockları resetle
             resetCoins();
 
-            // Mario yere insin
             mario.style.bottom = "120px";
         }
 
 
 
         function resetCoins() {
-            // Reset all coin blocks to have 1 coin again
             coinBlocks.forEach(block => {
                 block.setAttribute('data-coins', '1');
                 block.classList.remove('empty');
             });
         }
 
-        // Game loop
         setInterval(() => {
             updateMovement();
             checkCollision();

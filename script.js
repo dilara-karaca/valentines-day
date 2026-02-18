@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
 
 
 
-// ================= STAGE 1 =================
+// STAGE 1
 
 if (document.getElementById("questions")) {
 
@@ -36,7 +36,6 @@ if (document.getElementById("questions")) {
         { q: "Benzediğimiz hayvan?", a: "SİNCAP", key: "B" }
     ];
 
-    // 🔑 ANAHTAR KELİME
     const finalWord = "BUMBADİ";
 
     const letterPopup = document.getElementById("letterPopup");
@@ -50,7 +49,6 @@ if (document.getElementById("questions")) {
     letterPopup.classList.add("hidden");
     let celebrated = false;
 
-    // ÜST ANAHTAR KUTULARI
     finalWord.split("").forEach(() => {
         const box = document.createElement("div");
         box.addEventListener("dragover", e => e.preventDefault());
@@ -58,7 +56,6 @@ if (document.getElementById("questions")) {
         passwordArea.appendChild(box);
     });
 
-    // SORULARI OLUŞTUR
     questionsData.forEach(item => {
         const box = document.createElement("div");
         box.className = "question-box";
@@ -112,7 +109,6 @@ if (document.getElementById("questions")) {
         questionsDiv.appendChild(box);
     });
 
-    // SORU TAMAMLANDI MI?
     function checkComplete(container, key) {
         const inputs = [...container.querySelectorAll("input")];
         const done = inputs.every(i => i.disabled);
@@ -144,7 +140,6 @@ if (document.getElementById("questions")) {
         }
     }
 
-    // HARF BIRAKMA
     function dropLetter(e, box) {
         e.preventDefault();
 
@@ -171,7 +166,6 @@ if (document.getElementById("questions")) {
         checkFinal();
     }
 
-    // ANAHTAR KONTROL
     function checkFinal() {
         const attempt = [...passwordArea.children]
             .map(b => b.textContent)
@@ -207,9 +201,8 @@ if (document.getElementById("questions")) {
     };
 }
 
-// ================= STAGE 2 =================
+// STAGE 2 
 
-// Stage 2 sayfasında mı kontrol et
 if (document.querySelector(".timeline")) {
 
     let draggedElement = null;
@@ -229,7 +222,6 @@ if (document.querySelector(".timeline")) {
         }
     }
 
-    // EVENTS FOR TIMELINE ITEMS
     document.querySelectorAll(".event").forEach(event => {
         event.addEventListener("dragstart", e => {
             draggedElement = event;
@@ -243,7 +235,6 @@ if (document.querySelector(".timeline")) {
         });
     });
 
-    // DROP ZONELAR
     document.querySelectorAll(".drop-zone").forEach(zone => {
 
         zone.addEventListener("dragover", e => {
@@ -269,12 +260,10 @@ if (document.querySelector(".timeline")) {
 
             if (!draggedElement || !slot) return;
 
-            // Eğer bu slot zaten dolu ise, işlem yapma
             if (slot.classList.contains("filled")) return;
 
-            // ✅ DOĞRU TARİH
             if (slot.dataset.answer === draggedId) {
-                console.log("✅ Correct match:", draggedId, "->", slot.dataset.answer);
+                console.log("Correct match:", draggedId, "->", slot.dataset.answer);
                 zone.textContent = "";
                 zone.appendChild(draggedElement);
                 draggedElement.draggable = false;
@@ -284,9 +273,8 @@ if (document.querySelector(".timeline")) {
                 draggedElement = null;
                 checkStage2Complete();
             }
-            // ❌ YANLIŞ
             else {
-                console.log("❌ Wrong match:", draggedId, "!=", slot.dataset.answer);
+                console.log("Wrong match:", draggedId, "!=", slot.dataset.answer);
                 zone.dataset.correct = "false";
                 loseLife();
                 slot.classList.add("shake");
@@ -299,10 +287,10 @@ if (document.querySelector(".timeline")) {
         const totalSlots = document.querySelectorAll(".time-slot").length;
         const filledSlots = document.querySelectorAll(".time-slot.filled").length;
 
-        console.log("✅ Stage 2 Check - filled:", filledSlots, "total:", totalSlots);
+        console.log("Stage 2 Check - filled:", filledSlots, "total:", totalSlots);
 
         if (filledSlots === totalSlots) {
-            console.log("🎉 Stage 2 Complete!");
+            console.log("Stage 2 Complete!");
             completeStage2();
         }
     }
@@ -310,13 +298,13 @@ if (document.querySelector(".timeline")) {
 
 
     function completeStage2() {
-        console.log("🎯 completeStage2 called");
+        console.log("completeStage2 called");
 
         showStage2SuccessModal();
     }
 
     function showStage2SuccessModal(skipConfetti) {
-        console.log("🎊 showStage2SuccessModal called, skipConfetti:", skipConfetti);
+        console.log("showStage2SuccessModal called, skipConfetti:", skipConfetti);
 
         const modal = document.getElementById("stage2SuccessModal");
         const keyImage = document.getElementById("stage2Key");
@@ -331,7 +319,7 @@ if (document.querySelector(".timeline")) {
         }
 
         if (!skipConfetti && myConfetti) {
-            console.log("🎉 Firing confetti! myConfetti:", myConfetti);
+            console.log("Firing confetti! myConfetti:", myConfetti);
             myConfetti({
                 particleCount: 80,
                 spread: 120,
@@ -346,7 +334,7 @@ if (document.querySelector(".timeline")) {
                 colors: ["#f4a9b8", "#ffd6e0", "#ffffff"]
             });
         } else {
-            console.log("❌ Confetti not fired. skipConfetti:", skipConfetti, "myConfetti:", myConfetti);
+            console.log("Confetti not fired. skipConfetti:", skipConfetti, "myConfetti:", myConfetti);
         }
     }
 
@@ -358,17 +346,16 @@ if (document.querySelector(".timeline")) {
     }
 }
 
-// ================= STAGE 3: MEMORY GAME =================
+// STAGE 3: MEMORY GAME
 
 if (document.getElementById("memoryGame")) {
     console.log("🎴 Stage 3 Memory Game loaded");
 
     const gameContainer = document.getElementById("memoryGame");
 
-    // 6 fotoğraf, her birinden 2 tane = 12 kart
     const cardImages = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6];
 
-    // ⏱️ TIMER
+    // TIMER
     const timerText = document.getElementById("timerText");
     let timeLeft = 60;
     let timerInterval = null;
@@ -379,7 +366,6 @@ if (document.getElementById("memoryGame")) {
     let matchedPairs = 0;
     let canFlip = true;
 
-    // Kartları karıştır
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -390,7 +376,6 @@ if (document.getElementById("memoryGame")) {
 
     const shuffledCards = shuffle([...cardImages]);
 
-    // Kartları oluştur
     shuffledCards.forEach((imageNum, index) => {
         const card = document.createElement("div");
         card.className = "memory-card";
@@ -410,7 +395,7 @@ if (document.getElementById("memoryGame")) {
 
     function flipCard(card) {
 
-        // ⏱️ TIMER İLK KARTTA BAŞLASIN
+        // TIMER İLK KARTTA BAŞLASIN
         if (!timerStarted) {
             timerStarted = true;
             startTimer();
@@ -423,7 +408,7 @@ if (document.getElementById("memoryGame")) {
         card.classList.add("flipped");
         flippedCards.push(card);
 
-        console.log("🔄 Card flipped:", card.dataset.image, "Total flipped:", flippedCards.length);
+        console.log("Card flipped:", card.dataset.image, "Total flipped:", flippedCards.length);
 
         if (flippedCards.length === 2) {
             canFlip = false;
@@ -438,7 +423,7 @@ if (document.getElementById("memoryGame")) {
         const image2 = card2.dataset.image;
 
         if (image1 === image2) {
-            console.log("✅ Match found!", image1);
+            console.log("Match found!", image1);
 
             // Eşleşme animasyonu
             setTimeout(() => {
@@ -446,7 +431,7 @@ if (document.getElementById("memoryGame")) {
                 card2.classList.add("matched");
                 matchedPairs++;
 
-                console.log("🎯 Matched pairs:", matchedPairs, "/6");
+                console.log("Matched pairs:", matchedPairs, "/6");
 
                 flippedCards = [];
                 canFlip = true;
@@ -457,7 +442,7 @@ if (document.getElementById("memoryGame")) {
                 }
             }, 600);
         } else {
-            console.log("❌ No match:", image1, "vs", image2);
+            console.log("No match:", image1, "vs", image2);
 
             // Yanlış eşleşme - kartları geri çevir
             card1.classList.add("wrong");
@@ -500,7 +485,7 @@ if (document.getElementById("memoryGame")) {
 
     function completeStage3() {
         clearInterval(timerInterval);
-        console.log("🎉 Stage 3 Complete!");
+        console.log("Stage 3 Complete!");
 
         setTimeout(() => {
             const modal = document.getElementById("stage3SuccessModal");
